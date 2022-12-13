@@ -81,6 +81,7 @@ router.get("/", auth.optional, function(req, res, next) {
           .limit(Number(limit))
           .skip(Number(offset))
           .sort({ createdAt: "desc" })
+          .where('item.title')
           .contains(title)
           .exec(),
         Item.count(query).exec(),
