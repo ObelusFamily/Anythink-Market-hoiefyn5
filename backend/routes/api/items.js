@@ -47,7 +47,7 @@ router.get("/", auth.optional, function(req, res, next) {
   }
   
   if (typeof req.query.title !== "undefined") {
-    limit = req.query.title;
+    title = { 'item.title': req.query.title } ;
   }
 
   if (typeof req.query.offset !== "undefined") {
@@ -81,8 +81,6 @@ router.get("/", auth.optional, function(req, res, next) {
           .limit(Number(limit))
           .skip(Number(offset))
           .sort({ createdAt: "desc" })
-          .where('item.title')
-          .contains(title)
           .exec(),
         Item.count(query).exec(),
         req.payload ? User.findById(req.payload.id) : null
