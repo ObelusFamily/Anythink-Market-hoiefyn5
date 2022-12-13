@@ -38,6 +38,7 @@ router.param("comment", function(req, res, next, id) {
 
 router.get("/", auth.optional, function(req, res, next) {
   var query = {};
+  var title = {}
   var limit = 100;
   var offset = 0;
 
@@ -54,7 +55,7 @@ router.get("/", auth.optional, function(req, res, next) {
   }
   
   if (typeof req.query.title !== "undefined") {
-    query.title =  req.query.title;
+    title.title =  req.query.title;
   }
 
   Promise.all([
@@ -76,7 +77,7 @@ router.get("/", auth.optional, function(req, res, next) {
       }
 
       return Promise.all([
-        Item.find(query)
+        Item.find(title, query)
           .limit(Number(limit))
           .skip(Number(offset))
           .sort({ createdAt: "desc" })
