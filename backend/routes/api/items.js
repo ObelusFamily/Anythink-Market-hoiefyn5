@@ -37,12 +37,17 @@ router.param("comment", function(req, res, next, id) {
 });
 
 router.get("/", auth.optional, function(req, res, next) {
+  var title = undefined
   var query = {};
   var limit = 100;
   var offset = 0;
 
   if (typeof req.query.limit !== "undefined") {
     limit = req.query.limit;
+  }
+  
+  if (typeof req.query.title !== "undefined") {
+    limit = req.query.title;
   }
 
   if (typeof req.query.offset !== "undefined") {
@@ -76,6 +81,7 @@ router.get("/", auth.optional, function(req, res, next) {
           .limit(Number(limit))
           .skip(Number(offset))
           .sort({ createdAt: "desc" })
+          .contains(title)
           .exec(),
         Item.count(query).exec(),
         req.payload ? User.findById(req.payload.id) : null
